@@ -1,0 +1,28 @@
+{
+  "name": "api-check-angular",
+  "version": "1.0.0",
+  "description": "checkers and other utilities for using api-check with angular",
+  "main": "dist/api-check-angular.js",
+  "scripts": {
+    "test": "node_modules/karma/bind/karma start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alianza-dev/api-check-angular.git"
+  },
+  "keywords": [
+    "api-check",
+    "angular",
+    "angularjs",
+    "apiCheck.js"
+  ],
+  "author": "Kent C. Dodds <kent@doddsfamily.us> (http://kent.doddsfamily.us)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/alianza-dev/api-check-angular/issues"
+  },
+  "homepage": "https://github.com/alianza-dev/api-check-angular",
+  "peerDependencies": {
+    "api-check": "^7.2.0"
+  }
+}
