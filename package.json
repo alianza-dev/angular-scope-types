@@ -1,10 +1,19 @@
 {
   "name": "api-check-angular",
-  "version": "1.0.0",
+  "version": "1.0.0-beta.0",
   "description": "checkers and other utilities for using api-check with angular",
   "main": "dist/api-check-angular.js",
   "scripts": {
-    "test": "node_modules/karma/bind/karma start"
+    "build:dist": "NODE_ENV=development webpack --progress --colors",
+    "build:prod": "NODE_ENV=production webpack --progress --colors",
+    "build": "npm run build:dist; npm run build:prod",
+    "test": "NODE_ENV=test node node_modules/karma/bin/karma start karma.conf.js",
+    "test:single": "NODE_ENV=test node node_modules/karma/bin/karma start karma.conf.js --single-run",
+    "test:ci": "NODE_ENV=test:ci node node_modules/karma/bin/karma start karma.conf.js",
+    "watch": "NODE_ENV=development webpack --watch --progress --colors",
+    "start": "npm run watch & npm run test",
+    "release": "git push && npm publish && git push --tags",
+    "release:beta": "git push && npm publish --tag beta && git push --tags"
   },
   "repository": {
     "type": "git",
@@ -17,12 +26,45 @@
     "apiCheck.js"
   ],
   "author": "Kent C. Dodds <kent@doddsfamily.us> (http://kent.doddsfamily.us)",
+  "contributors": [
+    "Kent C. Dodds <kent@doddsfamily.us> (http://kent.doddsfamily.us)"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/alianza-dev/api-check-angular/issues"
   },
   "homepage": "https://github.com/alianza-dev/api-check-angular",
+  "config": {
+    "ghooks": {
+      "pre-commit": "npm run test:single"
+    }
+  },
   "peerDependencies": {
+    "angular": "^1.2.x || >= 1.4.0-beta.0 || >= 1.5.0-beta.0",
     "api-check": "^7.2.0"
+  },
+  "devDependencies": {
+    "angular": "^1.3.15",
+    "api-check": "^7.2.0",
+    "babel-core": "^5.1.13",
+    "babel-eslint": "^3.0.1",
+    "babel-loader": "^5.0.0",
+    "chai": "^2.2.0",
+    "deep-extend": "^0.3.3",
+    "eslint": "^0.19.0",
+    "eslint-loader": "^0.10.0",
+    "ghooks": "^0.3.2",
+    "karma": "^0.12.31",
+    "karma-chai": "^0.1.0",
+    "karma-chrome-launcher": "^0.1.8",
+    "karma-firefox-launcher": "^0.1.4",
+    "karma-mocha": "^0.1.10",
+    "karma-webpack": "^1.5.0",
+    "lodash": "^3.7.0",
+    "mocha": "^2.2.4",
+    "ng-annotate-loader": "0.0.2",
+    "webpack": "^1.8.9",
+    "webpack-core": "^0.6.5",
+    "webpack-notifier": "^1.2.1"
   }
 }
