@@ -1,6 +1,6 @@
 # angular-scope-types
 
-[![Build Status](https://img.shields.io/travis/alianza-dev/angular-scope-types.svg?style=flat-square)](https://travis-ci.org/kentcdodds/apiCheck.js)
+[![Build Status](https://img.shields.io/travis/alianza-dev/angular-scope-types.svg?style=flat-square)](https://travis-ci.org/alianza-dev/angular-scope-types)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/alianza-dev/angular-scope-types?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 This is still in the early stages. Wont be pushed to `npm` or `bower` until it's ready to go. Basically this is intended
