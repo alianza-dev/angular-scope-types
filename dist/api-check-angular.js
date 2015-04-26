@@ -2,14 +2,14 @@
 
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("api-check"));
+		module.exports = factory(require("api-check"), require("angular"));
 	else if(typeof define === 'function' && define.amd)
-		define(["api-check"], factory);
+		define(["api-check", "angular"], factory);
 	else if(typeof exports === 'object')
-		exports["apiCheckAngular"] = factory(require("api-check"));
+		exports["apiCheckAngular"] = factory(require("api-check"), require("angular"));
 	else
-		root["apiCheckAngular"] = factory(root["apiCheck"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_3__) {
+		root["apiCheckAngular"] = factory(root["apiCheck"], root["angular"]);
+})(this, function(__WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_6__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -66,9 +66,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _checkers = __webpack_require__(1);
+	var _checkers = __webpack_require__(2);
 
 	_defaults(exports, _interopRequireWildcard(_checkers));
+
+	var _apiCheckAngular = __webpack_require__(1);
+
+	_defaults(exports, _interopRequireWildcard(_apiCheckAngular));
 
 /***/ },
 /* 1 */
@@ -82,7 +86,128 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _injectableFunction = __webpack_require__(2);
+	var _angular = __webpack_require__(4);
+
+	var _angular2 = _interopRequireDefault(_angular);
+
+	var _apiCheckFactory = __webpack_require__(3);
+
+	var _apiCheckFactory2 = _interopRequireDefault(_apiCheckFactory);
+
+	var _checkerFactories = __webpack_require__(2);
+
+	var _checkerFactories2 = _interopRequireDefault(_checkerFactories);
+
+	exports['default'] = apiCheckAngularFactory;
+
+	function apiCheckAngularFactory(disabled) {
+	  var checkers = {};
+	  _angular2['default'].forEach(_checkerFactories2['default'], function (factory, name) {
+	    checkers[name] = factory({ disabled: disabled });
+	  });
+	  var apiCheckAngular = _apiCheckFactory2['default']({
+	    output: { prefix: 'api-check-angular' },
+	    disabled: disabled
+	  }, checkers);
+
+	  apiCheckAngular.directive = validateDirective;
+
+	  var directiveApi = getDirectiveApi(apiCheckAngular);
+
+	  return apiCheckAngular;
+
+	  function validateDirective(ddo) {
+	    apiCheckAngular.warn(directiveApi, ddo, { prefix: 'creating directive' });
+	    // Would really love to not have to extend the ddo's controller
+	    // like this. Suggestions welcome!
+	    ddo.controller = extendController(ddo.controller, scopeTypesController);
+
+	    scopeTypesController.$inject = ['$scope'];
+	    function scopeTypesController($scope) {
+	      var context = $scope;
+	      if (ddo.bindToController) {
+	        context = context[ddo.controllerAs];
+	      }
+	      _angular2['default'].forEach(ddo.scopeTypes, function (check, name) {
+	        if (!_angular2['default'].isDefined(context[name])) {
+	          (function () {
+	            var prefix = ddo.controllerAs ? ddo.controllerAs + '.' : '';
+	            var stopWatching = $scope.$watch('' + prefix + '' + name, function (value, oldValue) {
+	              if (value !== oldValue) {
+	                stopWatching();
+	                checkOption(check, name);
+	              }
+	            });
+	          })();
+	        } else {
+	          checkOption(check, name);
+	        }
+	      });
+
+	      function checkOption(checker, name) {
+	        apiCheckAngular.warn(checker, context[name], { prefix: '' + ddo.name + 'Directive' });
+	      }
+	    }
+
+	    return ddo;
+
+	    function extendController(originalController, newController) {
+	      if (!_angular2['default'].isDefined(originalController)) {
+	        return newController;
+	      }
+	      function wrappedController($scope, $controller, $element, $attrs, $transclude) {
+	        var context = { $scope: $scope, $element: $element, $attrs: $attrs, $transclude: $transclude };
+	        _angular2['default'].extend(this, $controller(newController, context));
+	        _angular2['default'].extend(this, $controller(originalController, context));
+	      }
+
+	      wrappedController.$inject = ['$scope', '$controller', '$element', '$attrs', '$transclude'];
+	      return wrappedController;
+	    }
+	  }
+	}
+
+	function getDirectiveApi(check) {
+	  var stringOrFunc = check.oneOfType([check.string, check.func]);
+	  var ddo = check.shape({
+	    priority: check.number.optional,
+	    template: check.shape.ifNot('templateUrl', stringOrFunc).optional,
+	    templateUrl: check.shape.ifNot('template', check.string).optional,
+	    transclude: check.bool.optional,
+	    restrict: check.oneOf(['A', 'E', 'AE', 'EA']).optional, // <-- TODO, more combinations
+	    templateNamespace: check.string.optional, // TODO, docs provided value: 'html',
+	    scope: check.oneOfType([check.bool, check.object]).optional, // TODO, make a scope checker
+	    controller: check.injectableFunction.optional,
+	    controllerAs: check.string.optional,
+	    bindToController: check.oneOfType([check.bool, check.object]).optional,
+	    // TODO, tell the version of angular and use a scope checker for +1.4
+	    require: check.string.optional, // TODO make a pattern checker.
+	    // 'siblingDirectiveName', // or // ['^parentDirectiveName', '?optionalDirectiveName', '?^optionalParent'],
+	    compile: check.func.optional,
+	    link: check.oneOfType([check.func, check.shape({
+	      pre: check.func.optional,
+	      post: check.func.optional
+	    }).strict]).optional,
+	    scopeTypes: check.objectOf(check.func).optional
+	  }).strict;
+
+	  return check.oneOfType([check.func, ddo]);
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _injectableFunction = __webpack_require__(5);
 
 	var _injectableFunction2 = _interopRequireDefault(_injectableFunction);
 
@@ -92,7 +217,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 2 */
+/* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __WEBPACK_EXTERNAL_MODULE_3__;
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	// some versions of angular don't export the angular module properly,
+	// so we get it from window in this case.
+	var angular = __webpack_require__(6);
+	if (!angular.version) {
+	  angular = window.angular;
+	}
+	exports['default'] = angular;
+	module.exports = exports['default'];
+
+/***/ },
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -145,28 +294,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return _apiCheck2['default'].oneOfType(types);
 	}
 
-	// Examples
-	/*
-	 function MainCtrl($scope) {}
-	 MainCtrl.$inject = ['$scope'];
-	 injectableFunctionChecker(MainCtrl); // <-- passes
-
-	 function LameCtrl($http) {}
-	 injectableFunctionChecker(LameCtrl); // <-- fails
-
-	 var ArrayCtrl = ['$animate', function($animate) {}];
-	 injectableFunctionChecker(ArrayCtrl); // <-- passes
-
-	 :-)
-	 */
-
 	module.exports = exports['default'];
 
 /***/ },
-/* 3 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __WEBPACK_EXTERNAL_MODULE_3__;
+	module.exports = __WEBPACK_EXTERNAL_MODULE_6__;
 
 /***/ }
 /******/ ])
