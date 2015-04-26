@@ -1,2 +1,2 @@
 export * from './checkers';
-export * from './apiCheckAngular';
+export * from './scopeTypes';

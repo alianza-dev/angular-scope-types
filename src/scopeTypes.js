@@ -3,9 +3,9 @@ import apiCheckFactory from 'api-check';
 import checkerFactories from './checkers';
 
 
-export default apiCheckAngularFactory;
+export default scopeTypesFactory;
 
-function apiCheckAngularFactory(disabled) {
+function scopeTypesFactory(disabled) {
   const checkers = {};
   angular.forEach(checkerFactories, (factory, name) => {
     checkers[name] = factory({disabled});

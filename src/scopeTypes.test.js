@@ -1,14 +1,14 @@
 /* eslint no-console:0 */
 import {expect} from 'chai';
-import apiCheckAngularFactory from './apiCheckAngular';
+import scopeTypesFactory from './scopeTypes';
 
-describe(`apiCheckAngular`, () => {
+describe(`scopeTypes`, () => {
   let scopeTypes, originalWarn, warnings;
   beforeEach(() => {
     warnings = [];
     originalWarn = console.warn;
     console.warn = fakeWarn;
-    scopeTypes = apiCheckAngularFactory();
+    scopeTypes = scopeTypesFactory();
   });
 
   describe(`directive`, () => {
