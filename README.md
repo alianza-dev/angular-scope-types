@@ -5,3 +5,10 @@
 
 This is still in the early stages. Wont be pushed to `npm` or `bower` until it's ready to go. Basically this is intended
 to bring a concept like React `propTypes` to Angular.
+
+This is based on trying to support [this issue](https://github.com/angular/angular.js/issues/11657) with as clean an api
+as possible.
+
+Here's the [prototype](http://jsbin.com/vimude/edit?html,js,console,output). This is going to be great :-)
+
+Let me know in the issues or on gitter if you want to help out!
