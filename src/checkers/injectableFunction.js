@@ -29,18 +29,3 @@ export default function injectableFunction({strictDi = false, disabled = false} 
 
   return apiCheck.oneOfType(types);
 }
-
-// Examples
-/*
- function MainCtrl($scope) {}
- MainCtrl.$inject = ['$scope'];
- injectableFunctionChecker(MainCtrl); // <-- passes
-
- function LameCtrl($http) {}
- injectableFunctionChecker(LameCtrl); // <-- fails
-
- var ArrayCtrl = ['$animate', function($animate) {}];
- injectableFunctionChecker(ArrayCtrl); // <-- passes
-
- :-)
- */
