@@ -1,5 +1,5 @@
 {
-  "name": "api-check-angular",
+  "name": "angular-scope-types",
   "version": "1.0.0-beta.0",
   "description": "checkers and other utilities for using api-check with angular",
   "main": "dist/api-check-angular.js",
