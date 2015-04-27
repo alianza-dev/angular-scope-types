@@ -1,7 +1,7 @@
 /* eslint no-console:0 */
 import {expect} from 'chai';
 
-import scopeTypesFactory from './scopeTypes';
+import {scopeTypesFactory} from './scopeTypes';
 
 describe(`scopeTypes`, () => {
   let scopeTypes, originalWarn, warnings;
