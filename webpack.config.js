@@ -30,9 +30,9 @@ function getDevConfig() {
     context: here('src'),
     entry: './index.js',
     output: {
-      filename: 'api-check-angular.js',
+      filename: 'angular-scope-types.js',
       path: here('dist'),
-      library: 'apiCheckAngular',
+      library: 'angularScopeTypes',
       libraryTarget: 'umd'
     },
 
@@ -88,7 +88,7 @@ function getDevConfig() {
 function getProdConfig() {
   var prodConfig = deepExtend({}, getDevConfig(), {
     output: {
-      filename: 'api-check-angular.min.js',
+      filename: 'angular-scope-types.min.js',
       path: here('dist')
     },
     devtool: 'source-map',

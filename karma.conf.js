@@ -11,9 +11,9 @@ var files = [
   './node_modules/chai/chai.js'
 ];
 if (ci) {
-  files.push('./.test/api-check-angular.min.js');
+  files.push('./.test/angular-scope-types.min.js');
 } else {
-  files.push('./.test/api-check-angular.js');
+  files.push('./.test/angular-scope-types.js');
   preprocessors = {
     '**/*.js': ['sourcemap'],
     '.test/**/*.js': ['coverage']
