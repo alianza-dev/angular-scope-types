@@ -3,29 +3,39 @@ var deepExtend = require('deep-extend');
 var path = require('path');
 var ci = process.env.NODE_ENV === 'test:ci';
 
+var preprocessors;
+var reporters = ['progress'];
+var files = [
+  './node_modules/api-check/dist/api-check.js',
+  './node_modules/angular/angular.js',
+  './node_modules/chai/chai.js'
+];
+if (ci) {
+  files.push('./.test/api-check-angular.min.js');
+} else {
+  files.push('./.test/api-check-angular.js');
+  preprocessors = {
+    '**/*.js': ['sourcemap'],
+    '.test/**/*.js': ['coverage']
+  };
+  reporters.push('coverage');
+}
+
 module.exports = function(config) {
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
     basePath: './',
     frameworks: ['mocha'],
-    files: [
-      './node_modules/api-check/dist/api-check.js',
-      './node_modules/angular/angular.js',
-      './node_modules/chai/chai.js',
-      './.test/**/*.js'
-    ],
+    files: files,
     exclude: [],
 
-    preprocessors: {
-      '**/*.js': ['sourcemap'],
-      '.test/**/*.js': ['coverage']
-    },
+    preprocessors: preprocessors,
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress', 'coverage'],
+    reporters: reporters,
 
     coverageReporter: {
       reporters: [

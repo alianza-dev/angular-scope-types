@@ -25,8 +25,8 @@ module.exports = config;
 
 
 function getDevConfig() {
-var exclude = /node_modules/;
-  return {
+  var exclude = /node_modules/;
+  var devConfig = {
     context: here('src'),
     entry: './index.js',
     output: {
@@ -53,12 +53,7 @@ var exclude = /node_modules/;
 
     devtool: 'inline-source-map',
 
-    plugins: [
-      new WebpackNotifierPlugin({
-        title: 'ATAC',
-        contentImage: here('other/logo.png')
-      })
-    ],
+    plugins: [],
 
     resolve: {
       extensions: ['', '.js'],
@@ -78,6 +73,16 @@ var exclude = /node_modules/;
       failOnWarning: false
     }
   };
+
+  if (process.env.ON_TRAVIS !== 'true') {
+    devConfig.plugins = [
+      new WebpackNotifierPlugin({
+        title: 'ATAC',
+        contentImage: here('other/logo.png')
+      })
+    ];
+  }
+  return devConfig;
 }
 
 function getProdConfig() {
@@ -121,7 +126,13 @@ function getTestConfig() {
 
 function getTestCIConfig() {
   return deepExtend({}, getProdConfig(), {
-    entry: './index.test.js'
+    entry: './index.test.js',
+    output: {
+      path: here('.test')
+    },
+    externals: {
+      chai: 'chai'
+    }
   });
 }
 
