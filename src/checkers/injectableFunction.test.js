@@ -1,15 +1,6 @@
 import {expect} from 'chai';
+import {expectPass, expectFail, controllers} from '../test-utils';
 import injectableFunction from './injectableFunction';
-
-function RegularFunction() {
-}
-
-function $Inject() {
-}
-$Inject.$inject = ['hey'];
-
-const ArrayFunction = ['hey', function ArrayFunction(hey) {
-}];
 
 describe(`injectableFunction checker`, () => {
 
@@ -29,19 +20,23 @@ describe(`injectableFunction checker`, () => {
     });
 
     it(`should pass with $inject property`, () => {
-      expectPass(checker($Inject));
+      expectPass(checker(controllers.$inject));
     });
 
     it(`should pass with Array syntax`, () => {
-      expectPass(checker(ArrayFunction));
+      expectPass(checker(controllers.array));
     });
 
     it(`should fail when given an array with non-strings before the function`, () => {
-      expectFail(checker(['foo', 23, RegularFunction]));
+      expectFail(checker(['foo', 23, controllers.regular]));
     });
 
     it(`should fail when given an array with the function not last`, () => {
-      expectFail(checker(['foo', RegularFunction, 'bar']));
+      expectFail(checker(['foo', controllers.regular, 'bar']));
+    });
+
+    it(`should fail when not given a function`, () => {
+      expectFail(checker(['foo', 'baz', 'bar']));
     });
   });
 
@@ -52,7 +47,7 @@ describe(`injectableFunction checker`, () => {
     });
 
     it(`should pass with a function`, () => {
-      expectPass(checker(RegularFunction));
+      expectPass(checker(controllers.regular));
     });
   });
 
@@ -63,7 +58,7 @@ describe(`injectableFunction checker`, () => {
     });
 
     it(`should fail with a function`, () => {
-      expectFail(checker(RegularFunction));
+      expectFail(checker(controllers.regular));
     });
   });
 
@@ -75,17 +70,9 @@ describe(`injectableFunction checker`, () => {
 
     it(`should succeed in any case`, () => {
       expectPass(checker('foo'));
-      expectPass(checker(RegularFunction));
+      expectPass(checker(controllers.regular));
     });
   });
-
-  function expectPass(val) {
-    expect(val).to.be.undefined;
-  }
-
-  function expectFail(val) {
-    expect(val).to.be.an.instanceOf(Error);
-  }
 
 });
 

@@ -6,12 +6,20 @@
   "scripts": {
     "build:dist": "NODE_ENV=development webpack --progress --colors",
     "build:prod": "NODE_ENV=production webpack --progress --colors",
+    "build:test": "NODE_ENV=test webpack --progress --colors --watch",
+    "build:test:single": "NODE_ENV=test webpack --progress --colors",
     "build": "npm run build:dist; npm run build:prod",
-    "test": "NODE_ENV=test node node_modules/karma/bin/karma start karma.conf.js",
+    "ci": "npm run code-checks && npm run test:ci && npm run check-coverage && npm run build",
+    "test": "npm run build:test & NODE_ENV=test node node_modules/karma/bin/karma start karma.conf.js",
     "test:single": "NODE_ENV=test node node_modules/karma/bin/karma start karma.conf.js --single-run",
     "test:ci": "NODE_ENV=test:ci node node_modules/karma/bin/karma start karma.conf.js",
     "watch": "NODE_ENV=development webpack --watch --progress --colors",
-    "start": "npm run watch & npm run test",
+    "start": "npm run test",
+    "check-coverage": "./node_modules/istanbul/lib/cli.js check-coverage --statements 90 --functions 90 --lines 90 --branches 70",
+    "coveralls": "cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+    "only-check": "node scripts/only-check.js",
+    "console-check": "node scripts/console-check.js",
+    "code-checks": "npm run only-check && npm run console-check",
     "release": "git push && npm publish && git push --tags",
     "release:beta": "git push && npm publish --tag beta && git push --tags"
   },
@@ -21,6 +29,9 @@
   },
   "keywords": [
     "api-check",
+    "angular-scope-types",
+    "react propTypes",
+    "angular scopeTypes",
     "angular",
     "angularjs",
     "apiCheck.js"
@@ -36,7 +47,7 @@
   "homepage": "https://github.com/alianza-dev/api-check-angular",
   "config": {
     "ghooks": {
-      "pre-commit": "node scripts/only-check.js && npm run test:single"
+      "pre-commit": "npm run code-checks && npm run test:single"
     }
   },
   "peerDependencies": {
@@ -52,16 +63,20 @@
     "babel-loader": "^5.0.0",
     "chai": "^2.2.0",
     "chalk": "^1.0.0",
+    "coveralls": "^2.11.2",
     "deep-extend": "^0.3.3",
     "eslint": "^0.19.0",
     "eslint-loader": "^0.10.0",
     "ghooks": "^0.3.2",
     "glob": "^5.0.5",
+    "istanbul": "^0.3.13",
     "karma": "^0.12.31",
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^0.1.8",
+    "karma-coverage": "^0.3.1",
     "karma-firefox-launcher": "^0.1.4",
     "karma-mocha": "^0.1.10",
+    "karma-sourcemap-loader": "^0.3.4",
     "karma-webpack": "^1.5.0",
     "lodash": "^3.7.0",
     "mocha": "^2.2.4",

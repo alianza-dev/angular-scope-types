@@ -51,6 +51,8 @@ var exclude = /node_modules/;
       }
     },
 
+    devtool: 'inline-source-map',
+
     plugins: [
       new WebpackNotifierPlugin({
         title: 'ATAC',
@@ -107,6 +109,12 @@ function getProdConfig() {
 function getTestConfig() {
   return deepExtend({}, getDevConfig(), {
     entry: './index.test.js',
+    output: {
+      path: here('.test')
+    },
+    externals: {
+      chai: 'chai'
+    },
     plugins: []
   });
 }

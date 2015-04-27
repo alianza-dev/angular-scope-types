@@ -5,24 +5,22 @@ import checkerFactories from './checkers';
 
 export default scopeTypesFactory;
 
-function scopeTypesFactory(disabled) {
-  const checkers = {};
-  angular.forEach(checkerFactories, (factory, name) => {
-    checkers[name] = factory({disabled});
-  });
-  const apiCheckAngular = apiCheckFactory({
+function scopeTypesFactory({disabled = false} = {disabled: false}) {
+  const scopeTypes = apiCheckFactory({
     output: {prefix: 'api-check-angular'},
     disabled
-  }, checkers);
+  });
+  // manually adding checkers so we have an instance of scopeTypes to pass them.
+  angular.forEach(checkerFactories, (factory, name) => {
+    scopeTypes[name] = factory({scopeTypes, disabled});
+  });
 
-  apiCheckAngular.directive = validateDirective;
+  scopeTypes.directive = validateDirective;
 
-  const directiveApi = getDirectiveApi(apiCheckAngular);
-
-  return apiCheckAngular;
+  return scopeTypes;
 
   function validateDirective(ddo) {
-    apiCheckAngular.warn(directiveApi, ddo, {prefix: 'creating directive'});
+    scopeTypes.warn(scopeTypes.ddo, ddo, {prefix: 'creating directive'});
     // Would really love to not have to extend the ddo's controller
     // like this. Suggestions welcome!
     ddo.controller = extendController(ddo.controller, scopeTypesController);
@@ -49,7 +47,7 @@ function scopeTypesFactory(disabled) {
 
 
       function checkOption(checker, name) {
-        apiCheckAngular.warn(checker, context[name], {prefix: `${ddo.name}Directive`});
+        scopeTypes.warn(checker, context[name], {prefix: `${ddo.name}Directive`});
       }
 
     }
@@ -71,34 +69,4 @@ function scopeTypesFactory(disabled) {
       return wrappedController;
     }
   }
-}
-
-function getDirectiveApi(check) {
-  const stringOrFunc = check.oneOfType([check.string, check.func]);
-  const ddo = check.shape({
-    priority: check.number.optional,
-    template: check.shape.ifNot('templateUrl', stringOrFunc).optional,
-    templateUrl: check.shape.ifNot('template', check.string).optional,
-    transclude: check.bool.optional,
-    restrict: check.oneOf(['A', 'E', 'AE', 'EA']).optional, // <-- TODO, more combinations
-    templateNamespace: check.string.optional, // TODO, docs provided value: 'html',
-    scope: check.oneOfType([check.bool, check.object]).optional, // TODO, make a scope checker
-    controller: check.injectableFunction.optional,
-    controllerAs: check.string.optional,
-    bindToController: check.oneOfType([check.bool, check.object]).optional,
-    // TODO, tell the version of angular and use a scope checker for +1.4
-    require: check.string.optional, // TODO make a pattern checker.
-    // 'siblingDirectiveName', // or // ['^parentDirectiveName', '?optionalDirectiveName', '?^optionalParent'],
-    compile: check.func.optional,
-    link: check.oneOfType([
-      check.func,
-      check.shape({
-        pre: check.func.optional,
-        post: check.func.optional
-      }).strict
-    ]).optional,
-    scopeTypes: check.objectOf(check.func).optional
-  }).strict;
-
-  return check.oneOfType([check.func, ddo]);
 }
