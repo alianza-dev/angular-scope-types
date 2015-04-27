@@ -17,7 +17,7 @@
     "watch": "NODE_ENV=development webpack --watch --progress --colors",
     "start": "npm run test",
     "check-coverage": "npm run test:single && ./node_modules/istanbul/lib/cli.js check-coverage --statements 90 --functions 90 --lines 90 --branches 70",
-    "coveralls": "cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+    "coveralls": "cat coverage/lcov.info | coveralls",
     "only-check": "node scripts/only-check.js",
     "console-check": "node scripts/console-check.js",
     "code-checks": "npm run only-check && npm run console-check",
