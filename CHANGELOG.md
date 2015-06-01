@@ -1,4 +1,4 @@
-# 2.0.0
+# 1.0.0-beta.1
 
 ## Breaking changes
 
@@ -10,5 +10,6 @@
 - Adding `disabled` option.
 - Improved the API, adding more tests, adding example.
 
-# 1.0.0
+# 1.0.0-beta.0
 
+- Initial release
