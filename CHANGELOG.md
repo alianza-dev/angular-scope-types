@@ -1,3 +1,9 @@
+# 1.0.0-beta.3
+
+## Bug Fixes
+
+- Fixing issue where a new instance of the controller was created and the properties were not bound to that instance.
+
 # 1.0.0-beta.2
 
 ## Other

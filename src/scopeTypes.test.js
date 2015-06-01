@@ -63,6 +63,22 @@ describe(`scopeTypes`, () => {
         }]);
       });
 
+      it(`should still allow the directive controller to use it's controller as`, () => {
+        createDirective(undefined, {
+          controller,
+          controllerAs: 'vm',
+          bindToController: true
+        });
+
+        function controller() {
+          const vm = this;
+
+          expect(vm.bar).to.eq('barString');
+        }
+        compileAndDigest();
+        expectNoWarning();
+      });
+
       function createDirective(name, definition, scopeTypesInstance = scopeTypes) {
         angular.mock.module(['$provide', '$compileProvider', function($provide, $compileProvider) {
           $provide.constant('myScopeTypes', scopeTypesInstance);
@@ -70,7 +86,10 @@ describe(`scopeTypes`, () => {
             return myScopeTypes.directive(angular.extend({
               template: 'foo',
               scope: {foo: '=', bar: '@'},
-              scopeTypes: getScopeTypes
+              scopeTypes: getScopeTypes,
+              controllerAs: 'vm',
+              bindToController: true,
+              controller: angular.noop
             }, definition));
           }]);
         }]);

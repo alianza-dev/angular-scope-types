@@ -97,13 +97,13 @@ function scopeTypesFactory({
       if (!angular.isDefined(originalController)) {
         return newController;
       }
-      function wrappedController($scope, $controller, $element, $attrs, $transclude) {
-        const context = {$scope, $element, $attrs, $transclude};
-        angular.extend(this, $controller(newController, context));
-        angular.extend(this, $controller(originalController, context));
+      function wrappedController($scope, $controller, $element, $attrs, $transclude, $injector) {
+        const locals = {$scope, $element, $attrs, $transclude};
+        $injector.invoke(newController, this, locals);
+        $injector.invoke(originalController, this, locals);
       }
 
-      wrappedController.$inject = ['$scope', '$controller', '$element', '$attrs', '$transclude'];
+      wrappedController.$inject = ['$scope', '$controller', '$element', '$attrs', '$transclude', '$injector'];
       return wrappedController;
     }
   }
