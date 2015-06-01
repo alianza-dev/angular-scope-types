@@ -1,8 +1,8 @@
 {
   "name": "angular-scope-types",
-  "version": "1.0.0-beta.0",
+  "version": "1.0.0-beta.1",
   "description": "checkers and other utilities for using api-check with angular",
-  "main": "dist/api-check-angular.js",
+  "main": "dist/angular-scope-types.js",
   "scripts": {
     "build:dist": "NODE_ENV=development webpack --progress --colors",
     "build:prod": "NODE_ENV=production webpack --progress --colors",
@@ -26,7 +26,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/alianza-dev/api-check-angular.git"
+    "url": "https://github.com/alianza-dev/angular-scope-types.git"
   },
   "keywords": [
     "api-check",
@@ -43,9 +43,9 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/alianza-dev/api-check-angular/issues"
+    "url": "https://github.com/alianza-dev/angular-scope-types/issues"
   },
-  "homepage": "https://github.com/alianza-dev/api-check-angular",
+  "homepage": "https://github.com/alianza-dev/angular-scope-types",
   "config": {
     "ghooks": {
       "pre-commit": "npm run code-checks && npm run test:single"
@@ -57,6 +57,7 @@
   },
   "devDependencies": {
     "angular": "^1.3.15",
+    "angular-mocks": "^1.4.0",
     "api-check": "^7.2.0",
     "async": "^0.9.0",
     "babel-core": "^5.1.13",
@@ -82,6 +83,8 @@
     "lodash": "^3.7.0",
     "mocha": "^2.2.4",
     "ng-annotate-loader": "0.0.2",
+    "sinon": "git://github.com/cjohansen/Sinon.JS#sinon-2.0",
+    "sinon-chai": "^2.6.0",
     "webpack": "^1.8.9",
     "webpack-core": "^0.6.5",
     "webpack-notifier": "^1.2.1"

@@ -51,8 +51,6 @@ function getDevConfig() {
       }
     },
 
-    devtool: 'inline-source-map',
-
     plugins: [],
 
     resolve: {
