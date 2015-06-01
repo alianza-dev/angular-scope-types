@@ -8,17 +8,21 @@ var reporters = ['progress'];
 var files = [
   './node_modules/api-check/dist/api-check.js',
   './node_modules/angular/angular.js',
-  './node_modules/chai/chai.js'
+  './node_modules/angular-mocks/angular-mocks.js',
+  './node_modules/chai/chai.js',
+  './node_modules/sinon-chai/lib/sinon-chai.js'
 ];
 if (ci) {
   files.push('./.test/angular-scope-types.min.js');
 } else {
   files.push('./.test/angular-scope-types.js');
   preprocessors = {
-    '**/*.js': ['sourcemap'],
-    '.test/**/*.js': ['coverage']
+    '**/*.js': ['sourcemap']
   };
-  reporters.push('coverage');
+  if (process.env.COVERAGE === 'true') {
+    preprocessors['.test/**/*.js'] = ['coverage'];
+    reporters.push('coverage');
+  }
 }
 
 module.exports = function(config) {
@@ -26,7 +30,7 @@ module.exports = function(config) {
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
     basePath: './',
-    frameworks: ['mocha'],
+    frameworks: ['mocha', 'sinon'],
     files: files,
     exclude: [],
 
@@ -75,6 +79,7 @@ module.exports = function(config) {
 
     plugins: [
       'karma-mocha',
+      'karma-sinon',
       'karma-chai',
       'karma-coverage',
       'karma-sourcemap-loader',

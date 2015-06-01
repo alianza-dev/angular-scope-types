@@ -1,6 +1,6 @@
 {
   "name": "angular-scope-types",
-  "version": "1.0.0-beta.2",
+  "version": "1.0.0-beta.3",
   "description": "checkers and other utilities for using api-check with angular",
   "main": "dist/angular-scope-types.js",
   "scripts": {
@@ -16,7 +16,7 @@
     "test:ci": "npm run build:test:ci && NODE_ENV=test:ci node node_modules/karma/bin/karma start karma.conf.js",
     "watch": "NODE_ENV=development webpack --watch --progress --colors",
     "start": "npm run test",
-    "check-coverage": "npm run test:single && ./node_modules/istanbul/lib/cli.js check-coverage --statements 90 --functions 90 --lines 90 --branches 70",
+    "check-coverage": "COVERAGE=true npm run test:single && ./node_modules/istanbul/lib/cli.js check-coverage --statements 96 --branches 78 --functions 99 --lines 97",
     "coveralls": "cat coverage/lcov.info | coveralls",
     "only-check": "node scripts/only-check.js",
     "console-check": "node scripts/console-check.js",
@@ -48,7 +48,7 @@
   "homepage": "https://github.com/alianza-dev/angular-scope-types",
   "config": {
     "ghooks": {
-      "pre-commit": "npm run code-checks && npm run test:single"
+      "pre-commit": "npm run ci"
     }
   },
   "peerDependencies": {
@@ -78,12 +78,12 @@
     "karma-coverage": "^0.3.1",
     "karma-firefox-launcher": "^0.1.4",
     "karma-mocha": "^0.1.10",
+    "karma-sinon": "^1.0.4",
     "karma-sourcemap-loader": "^0.3.4",
     "karma-webpack": "^1.5.0",
     "lodash": "^3.7.0",
     "mocha": "^2.2.4",
     "ng-annotate-loader": "0.0.2",
-    "sinon": "git://github.com/cjohansen/Sinon.JS#sinon-2.0",
     "sinon-chai": "^2.6.0",
     "webpack": "^1.8.9",
     "webpack-core": "^0.6.5",

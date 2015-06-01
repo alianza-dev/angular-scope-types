@@ -48,7 +48,10 @@ function getDevConfig() {
         amd: 'api-check',
         commonjs2: 'api-check',
         commonjs: 'api-check'
-      }
+      },
+      chai: 'chai',
+      'sinon-chai': 'sinonChai',
+      sinon: 'sinon'
     },
 
     plugins: [],
