@@ -1,6 +1,8 @@
 /* eslint no-console:0 */
+/* eslint max-nested-callbacks:0 */
 import {expect} from 'chai';
 import angular from 'angular-fix';
+import sinon from 'sinon';
 
 import scopeTypesFactory from './scopeTypes';
 
@@ -34,16 +36,6 @@ describe(`scopeTypes`, () => {
         expectNoWarning();
       });
 
-      it(`should allow me to specify an object (rather than a function)`, () => {
-        createDirective({
-          scopeTypes: getScopeTypes(scopeTypes)
-        });
-        compileAndDigest({
-          foo: {isFoo: true, isBar: false, someNum: 23}
-        });
-        expectNoWarning();
-      });
-
       it(`should warn me when I pass something wrong to the directive`, () => {
         createDirective();
         compileAndDigest({
@@ -52,9 +44,28 @@ describe(`scopeTypes`, () => {
         expectWarning(/not a boolean/);
       });
 
-      function createDirective(name, definition) {
+      it(`should be able to be disabled`, () => {
+        const myDisabledScopeTypes = scopeTypesFactory({disabled: true});
+        const myDirName = 'dirName';
+        const controller = sinon.spy();
+        const scopeTypesSpy = sinon.spy(getScopeTypes);
+        createDirective(myDirName, {controller}, myDisabledScopeTypes);
+
+        compileAndDigest({}, '<dir-name></dir-name>');
+
+        angular.mock.inject($injector => {
+          const ddo = $injector.get(`${myDirName}Directive`);
+
+          expect(ddo[0].controller).to.eq(controller);
+          expect(controller).to.have.been.called;
+          expect(scopeTypesSpy).to.not.have.been.called;
+          expectNoWarning();
+        });
+      });
+
+      function createDirective(name, definition, scopeTypesInstance = scopeTypes) {
         angular.mock.module(function($provide, $compileProvider) {
-          $provide.constant('myScopeTypes', scopeTypes);
+          $provide.constant('myScopeTypes', scopeTypesInstance);
           $compileProvider.directive(name || 'scopeTypeDir', function(myScopeTypes) {
             return myScopeTypes.directive(angular.extend({
               template: 'foo',

@@ -19,14 +19,14 @@ export default function ddo({
     template: check.shape.ifNot('templateUrl', stringOrFunc).optional,
     templateUrl: check.shape.ifNot('template', check.string).optional,
     transclude: check.bool.optional,
-    restrict: check.oneOf(['A', 'E', 'AE', 'EA']).optional, // <-- TODO, more combinations
-    templateNamespace: check.string.optional, // TODO, docs provided value: 'html',
-    scope: check.oneOfType([check.bool, check.object]).optional, // TODO, make a scope checker
+    restrict: check.oneOf(['A', 'E', 'C', 'AE', 'EA', 'AEC', 'AC', 'EC']).optional,
+    templateNamespace: check.oneOf(['html', 'svg', 'math']).optional,
+    scope: check.oneOfType([check.bool, check.objectOf(check.string)]).optional, // TODO, make an advanced scope checker
     controller: check.injectableFunction.optional,
     controllerAs: check.string.optional,
-    bindToController: check.oneOfType([check.bool, check.object]).optional,
+    bindToController: check.oneOfType([check.bool, check.objectOf(check.string)]).optional,
     // TODO, tell the version of angular and use a scope checker for +1.4
-    require: check.string.optional, // TODO make a pattern checker.
+    require: check.typeOrArrayOf(check.string).optional, // TODO make a pattern checker.
     //'siblingDirectiveName', // or // ['^parentDirectiveName', '?optionalDirectiveName', '?^optionalParent'],
     compile: check.func.optional,
     link: check.oneOfType([
@@ -36,7 +36,8 @@ export default function ddo({
         post: check.func.optional
       }).strict
     ]).optional,
-    scopeTypes: check.oneOfType([check.objectOf(check.func), check.func]).optional
+    scopeTypes: check.func,
+    data: check.object.optional
   }).strict;
 
   return check.oneOfType([check.func, ddoShape]);

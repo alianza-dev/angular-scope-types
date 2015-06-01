@@ -30,9 +30,7 @@ describe(`ddo checker`, () => {
         controllerAs: 'vm',
         controller: controllers.$inject,
         bindToController: true,
-        scopeTypes: {
-          foo: scopeTypes.shape({})
-        }
+        scopeTypes: st => ({foo: st.shape({})})
       }));
     });
   });
