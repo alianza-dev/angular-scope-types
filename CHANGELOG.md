@@ -1,3 +1,9 @@
+# 1.0.0-beta.2
+
+## Other
+
+- Adding `.npmignore`
+
 # 1.0.0-beta.1
 
 ## Breaking changes
