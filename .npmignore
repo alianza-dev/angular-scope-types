@@ -10,3 +10,5 @@ node_modules
 index.html
 npm-debug.log
 webpack.config.js
+scripts
+karma.conf.js
