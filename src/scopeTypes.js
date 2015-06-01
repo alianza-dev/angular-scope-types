@@ -3,7 +3,7 @@ import apiCheckFactory from 'api-check';
 import checkerFactories from './checkers';
 
 
-export function scopeTypesFactory({disabled = false} = {disabled: false}) {
+export default function scopeTypesFactory({disabled = false} = {disabled: false}) {
   const scopeTypes = apiCheckFactory({
     output: {prefix: 'api-check-angular'},
     disabled

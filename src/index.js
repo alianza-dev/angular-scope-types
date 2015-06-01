@@ -1,2 +1,4 @@
-export * from './checkers';
-export * from './scopeTypes';
+import scopeTypes from './scopeTypes';
+
+export default scopeTypes;
+

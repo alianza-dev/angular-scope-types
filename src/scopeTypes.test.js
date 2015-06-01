@@ -2,7 +2,7 @@
 import {expect} from 'chai';
 import angular from 'angular-fix';
 
-import {scopeTypesFactory} from './scopeTypes';
+import scopeTypesFactory from './scopeTypes';
 
 describe(`scopeTypes`, () => {
   let scopeTypes, originalWarn, warnings;
@@ -24,9 +24,11 @@ describe(`scopeTypes`, () => {
     describe(`creating directives`, () => {
       let scope, el;
 
+      const basicTemplate = '<scope-type-dir foo="foo" bar="barString"></scope-type-dir>';
+
       it(`should allow me to create a type checked directive`, () => {
         createDirective();
-        compileAndDigest('<scope-type-dir foo="foo" bar="barString"></scope-type-dir>', {
+        compileAndDigest({
           foo: {isFoo: true, isBar: false, someNum: 23}
         });
         expectNoWarning();
@@ -36,7 +38,7 @@ describe(`scopeTypes`, () => {
         createDirective({
           scopeTypes: getScopeTypes(scopeTypes)
         });
-        compileAndDigest('<scope-type-dir foo="foo" bar="barString"></scope-type-dir>', {
+        compileAndDigest({
           foo: {isFoo: true, isBar: false, someNum: 23}
         });
         expectNoWarning();
@@ -44,7 +46,7 @@ describe(`scopeTypes`, () => {
 
       it(`should warn me when I pass something wrong to the directive`, () => {
         createDirective();
-        compileAndDigest('<scope-type-dir foo="foo" bar="barString"></scope-type-dir>', {
+        compileAndDigest({
           foo: {isFoo: 'not a boolean', isBar: false, someNum: 23}
         });
         expectWarning(/not a boolean/);
@@ -64,7 +66,7 @@ describe(`scopeTypes`, () => {
       }
 
 
-      function compileAndDigest(template = basicTemplate, extraProps = {}) {
+      function compileAndDigest(extraProps = {}, template = basicTemplate) {
         angular.mock.inject(($compile, $rootScope) => {
           scope = $rootScope.$new();
           angular.extend(scope, extraProps);
