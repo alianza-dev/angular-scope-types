@@ -36,7 +36,7 @@ export default function ddo({
         post: check.func.optional
       }).strict
     ]).optional,
-    scopeTypes: check.objectOf(check.func).optional
+    scopeTypes: check.oneOfType([check.objectOf(check.func), check.func]).optional
   }).strict;
 
   return check.oneOfType([check.func, ddoShape]);

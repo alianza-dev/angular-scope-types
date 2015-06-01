@@ -29,7 +29,11 @@ export function scopeTypesFactory({disabled = false} = {disabled: false}) {
       if (ddo.bindToController) {
         context = context[ddo.controllerAs];
       }
-      angular.forEach(ddo.scopeTypes, function(check, name) {
+      let typeDefinition = ddo.scopeTypes;
+      if (angular.isFunction(typeDefinition)) {
+        typeDefinition = typeDefinition(scopeTypes);
+      }
+      angular.forEach(typeDefinition, function(check, name) {
         if (!angular.isDefined(context[name])) {
           let prefix = ddo.controllerAs ? ddo.controllerAs + '.' : '';
           const stopWatching = $scope.$watch(`${prefix}${name}`, function(value, oldValue) {
