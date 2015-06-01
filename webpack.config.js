@@ -102,7 +102,6 @@ function getProdConfig() {
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.AggressiveMergingPlugin(),
     new webpack.optimize.UglifyJsPlugin({
-      exclude: /\.test\.js$/,
       compress: {warnings: false}
     })
   ];

@@ -53,37 +53,37 @@ describe(`scopeTypes`, () => {
 
         compileAndDigest({}, '<dir-name></dir-name>');
 
-        angular.mock.inject($injector => {
+        angular.mock.inject(['$injector', $injector => {
           const ddo = $injector.get(`${myDirName}Directive`);
 
           expect(ddo[0].controller).to.eq(controller);
           expect(controller).to.have.been.called;
           expect(scopeTypesSpy).to.not.have.been.called;
           expectNoWarning();
-        });
+        }]);
       });
 
       function createDirective(name, definition, scopeTypesInstance = scopeTypes) {
-        angular.mock.module(function($provide, $compileProvider) {
+        angular.mock.module(['$provide', '$compileProvider', function($provide, $compileProvider) {
           $provide.constant('myScopeTypes', scopeTypesInstance);
-          $compileProvider.directive(name || 'scopeTypeDir', function(myScopeTypes) {
+          $compileProvider.directive(name || 'scopeTypeDir', ['myScopeTypes', function(myScopeTypes) {
             return myScopeTypes.directive(angular.extend({
               template: 'foo',
               scope: {foo: '=', bar: '@'},
               scopeTypes: getScopeTypes
             }, definition));
-          });
-        });
+          }]);
+        }]);
       }
 
 
       function compileAndDigest(extraProps = {}, template = basicTemplate) {
-        angular.mock.inject(($compile, $rootScope) => {
+        angular.mock.inject(['$compile', '$rootScope', ($compile, $rootScope) => {
           scope = $rootScope.$new();
           angular.extend(scope, extraProps);
           el = $compile(template)(scope);
           scope.$digest();
-        });
+        }]);
         return el;
       }
 
