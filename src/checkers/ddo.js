@@ -27,7 +27,7 @@ export default function ddo({
     bindToController: check.oneOfType([check.bool, check.objectOf(check.string)]).optional,
     // TODO, tell the version of angular and use a scope checker for +1.4
     require: check.typeOrArrayOf(check.string).optional, // TODO make a pattern checker.
-    //'siblingDirectiveName', // or // ['^parentDirectiveName', '?optionalDirectiveName', '?^optionalParent'],
+    // 'siblingDirectiveName', // or // ['^parentDirectiveName', '?optionalDirectiveName', '?^optionalParent'],
     compile: check.func.optional,
     link: check.oneOfType([
       check.func,

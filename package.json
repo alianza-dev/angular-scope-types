@@ -1,6 +1,6 @@
 {
   "name": "angular-scope-types",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0-beta.2",
   "description": "checkers and other utilities for using api-check with angular",
   "main": "dist/angular-scope-types.js",
   "scripts": {

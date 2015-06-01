@@ -1,4 +1,4 @@
-// angular-scope-types version 1.0.0-beta.1 built with ♥ by Kent C. Dodds <kent@doddsfamily.us> (http://kent.doddsfamily.us) (ó ì_í)=óò=(ì_í ò)
+// angular-scope-types version 1.0.0-beta.2 built with ♥ by Kent C. Dodds <kent@doddsfamily.us> (http://kent.doddsfamily.us) (ó ì_í)=óò=(ì_í ò)
 
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
@@ -364,7 +364,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    bindToController: check.oneOfType([check.bool, check.objectOf(check.string)]).optional,
 	    // TODO, tell the version of angular and use a scope checker for +1.4
 	    require: check.typeOrArrayOf(check.string).optional, // TODO make a pattern checker.
-	    //'siblingDirectiveName', // or // ['^parentDirectiveName', '?optionalDirectiveName', '?^optionalParent'],
+	    // 'siblingDirectiveName', // or // ['^parentDirectiveName', '?optionalDirectiveName', '?^optionalParent'],
 	    compile: check.func.optional,
 	    link: check.oneOfType([check.func, check.shape({
 	      pre: check.func.optional,

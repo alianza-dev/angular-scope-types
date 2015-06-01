@@ -1,4 +1,3 @@
-//import {expect} from 'chai';
 import {expectPass, expectFail, link, controllers} from '../test-utils';
 import scopeTypesFactory from '../scopeTypes';
 
