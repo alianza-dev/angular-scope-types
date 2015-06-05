@@ -1,4 +1,4 @@
-// angular-scope-types version 1.0.0-beta.3 built with ♥ by Kent C. Dodds <kent@doddsfamily.us> (http://kent.doddsfamily.us) (ó ì_í)=óò=(ì_í ò)
+// angular-scope-types version 1.0.0-beta.4 built with ♥ by Kent C. Dodds <kent@doddsfamily.us> (http://kent.doddsfamily.us) (ó ì_í)=óò=(ì_í ò)
 
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
@@ -95,20 +95,22 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _checkers2 = _interopRequireDefault(_checkers);
 
-	var defaultOutput = { prefix: 'api-check-angular' };
+	var defaultOutput = { prefix: 'angular-scope-types' };
 
 	exports['default'] = scopeTypesFactory;
 
 	function scopeTypesFactory() {
 	  var _ref = arguments[0] === undefined ? {
 	    disabled: false,
-	    output: defaultOutput
+	    output: defaultOutput,
+	    apiCheckInstance: undefined
 	  } : arguments[0];
 
 	  var _ref$disabled = _ref.disabled;
 	  var disabled = _ref$disabled === undefined ? false : _ref$disabled;
 	  var _ref$output = _ref.output;
 	  var output = _ref$output === undefined ? defaultOutput : _ref$output;
+	  var apiCheckInstance = _ref.apiCheckInstance;
 
 	  var scopeTypes = (0, _apiCheck2['default'])({
 	    output: output,
@@ -121,10 +123,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  scopeTypes.directive = validateDirective;
 
+	  apiCheckInstance = apiCheckInstance || scopeTypes;
+
 	  return scopeTypes;
 
 	  function validateDirective(ddo) {
-	    if (scopeTypes.config.disabled) {
+	    if (scopeTypes.config.disabled || apiCheckInstance.config.disabled) {
 	      return ddo;
 	    }
 	    scopeTypes.warn(scopeTypes.ddo, ddo, { prefix: 'creating directive with scopeTypes' });
@@ -139,8 +143,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        context = context[ddo.controllerAs];
 	      }
 
-	      var typeDefinitions = ddo.scopeTypes(scopeTypes);
-	      scopeTypes.warn(scopeTypes.objectOf(scopeTypes.func), typeDefinitions, { prefix: 'getting scope types for ' + ddo.name });
+	      var typeDefinitions = ddo.scopeTypes(apiCheckInstance);
+	      scopeTypes.warn(scopeTypes.objectOf(scopeTypes.func).optional, typeDefinitions, { prefix: 'getting scope types for ' + ddo.name });
 
 	      $scope.$scopeTypesResults = { __passed: 0, __failed: 0 };
 
@@ -161,7 +165,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      });
 
 	      function checkOption(checker, name) {
-	        $scope.$scopeTypesResults[name] = scopeTypes.warn(checker, context[name], { prefix: '' + ddo.name + 'Directive for "' + name + '"' });
+	        $scope.$scopeTypesResults[name] = apiCheckInstance.warn(checker, context[name], { prefix: '' + ddo.name + 'Directive for "' + name + '"' });
 	        updateData();
 	      }
 
