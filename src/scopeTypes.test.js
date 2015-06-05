@@ -3,6 +3,7 @@
 import {expect} from 'chai';
 import angular from 'angular-fix';
 import sinon from 'sinon';
+import apiCheck from 'api-check';
 
 import scopeTypesFactory from './scopeTypes';
 
@@ -77,6 +78,19 @@ describe(`scopeTypes`, () => {
         }
         compileAndDigest();
         expectNoWarning();
+      });
+
+      it(`should allow you to pass your own instance of an apiCheck`, () => {
+        const myApiCheck = apiCheck({});
+        const myScopeTypes = scopeTypesFactory({apiCheckInstance: myApiCheck});
+        const myDirName = 'dirName';
+        const scopeTypesSpy = sinon.spy();
+        createDirective(myDirName, {scope: {}, scopeTypes: scopeTypesSpy}, myScopeTypes);
+        compileAndDigest({}, '<dir-name></dir-name>');
+        angular.mock.inject(['$injector', $injector => {
+          expect(scopeTypesSpy).to.have.been.called;
+          expectNoWarning();
+        }]);
       });
 
       function createDirective(name, definition, scopeTypesInstance = scopeTypes) {

@@ -2,16 +2,18 @@ import angular from 'angular-fix';
 import apiCheckFactory from 'api-check';
 import checkerFactories from './checkers';
 
-const defaultOutput = {prefix: 'api-check-angular'};
+const defaultOutput = {prefix: 'angular-scope-types'};
 
 export default scopeTypesFactory;
 
 function scopeTypesFactory({
   disabled = false,
-  output = defaultOutput
+  output = defaultOutput,
+  apiCheckInstance
   } = {
   disabled: false,
-  output: defaultOutput
+  output: defaultOutput,
+  apiCheckInstance: undefined
 }) {
   const scopeTypes = apiCheckFactory({
     output: output,
@@ -24,10 +26,12 @@ function scopeTypesFactory({
 
   scopeTypes.directive = validateDirective;
 
+  apiCheckInstance = apiCheckInstance || scopeTypes;
+
   return scopeTypes;
 
   function validateDirective(ddo) {
-    if (scopeTypes.config.disabled) {
+    if (scopeTypes.config.disabled || apiCheckInstance.config.disabled) {
       return ddo;
     }
     scopeTypes.warn(scopeTypes.ddo, ddo, {prefix: 'creating directive with scopeTypes'});
@@ -42,9 +46,11 @@ function scopeTypesFactory({
         context = context[ddo.controllerAs];
       }
 
-      let typeDefinitions = ddo.scopeTypes(scopeTypes);
+      let typeDefinitions = ddo.scopeTypes(apiCheckInstance);
       scopeTypes.warn(
-        scopeTypes.objectOf(scopeTypes.func), typeDefinitions, {prefix: `getting scope types for ${ddo.name}`}
+        scopeTypes.objectOf(scopeTypes.func).optional,
+        typeDefinitions,
+        {prefix: `getting scope types for ${ddo.name}`}
       );
 
       $scope.$scopeTypesResults = {__passed: 0, __failed: 0};
@@ -65,7 +71,7 @@ function scopeTypesFactory({
 
 
       function checkOption(checker, name) {
-        $scope.$scopeTypesResults[name] = scopeTypes.warn(
+        $scope.$scopeTypesResults[name] = apiCheckInstance.warn(
           checker, context[name], {prefix: `${ddo.name}Directive for "${name}"`}
         );
         updateData();
