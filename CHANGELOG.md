@@ -1,3 +1,9 @@
+# 1.0.0-beta.6
+
+## Other
+
+- Fixing link in README.md
+
 # 1.0.0-beta.5
 
 ## Breaking Changes
