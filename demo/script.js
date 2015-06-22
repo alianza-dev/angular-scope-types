@@ -37,8 +37,8 @@ app.directive('scopeTypedDir', function(scopeTypesDirective) {
         isBar: st.bool,
         someNum: st.number,
         someOptional: st.object.optional
-      }).strict,
-      bar: st.oneOf(['fooString', 'barString']).optional
+      }).strict.optional,
+      bar: st.oneOf(['fooString', 'barString'])
     };
   }
 
