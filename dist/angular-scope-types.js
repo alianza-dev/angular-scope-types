@@ -1,4 +1,4 @@
-//! angular-scope-types version 1.0.0-beta.4 built with ♥ by Kent C. Dodds <kent@doddsfamily.us> (http://kent.doddsfamily.us) (ó ì_í)=óò=(ì_í ò)
+//! angular-scope-types version 1.0.0-beta.5 built with ♥ by Kent C. Dodds <kent@doddsfamily.us> (http://kent.doddsfamily.us) (ó ì_í)=óò=(ì_í ò)
 
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
@@ -149,7 +149,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      $scope.$scopeTypesResults = { __passed: 0, __failed: 0 };
 
 	      _angularFix2['default'].forEach(typeDefinitions, function (check, name) {
-	        if (!_angularFix2['default'].isDefined(context[name])) {
+	        if (!_angularFix2['default'].isDefined(context[name]) && check.isOptional) {
 	          (function () {
 	            var prefix = ddo.controllerAs ? ddo.controllerAs + '.' : '';
 	            var stopWatching = $scope.$watch('' + prefix + '' + name, function (value, oldValue) {
@@ -165,7 +165,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      });
 
 	      function checkOption(checker, name) {
-	        $scope.$scopeTypesResults[name] = apiCheckInstance.warn(checker, context[name], { prefix: '' + ddo.name + 'Directive for "' + name + '"' });
+	        $scope.$scopeTypesResults[name] = apiCheckInstance[ddo.scopeTypesFunction || 'warn'](checker, context[name], { prefix: '' + ddo.name + 'Directive for "' + name + '"' });
 	        updateData();
 	      }
 
@@ -200,7 +200,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 
 	      wrappedController.$inject = ['$scope', '$controller', '$element', '$attrs', '$transclude', '$injector'];
+	      wrappedController.displayName = getWrappedControllerDisplayName(originalController);
 	      return wrappedController;
+	    }
+
+	    function getWrappedControllerDisplayName(originalController) {
+	      var originalControllerName = originalController.displayName || originalController.name;
+	      var name = 'angular-scope-types controller wrapper';
+	      if (originalControllerName) {
+	        name = '' + name + ' for ' + originalControllerName;
+	      }
+	      return name;
 	    }
 	  }
 	}
@@ -375,6 +385,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      post: check.func.optional
 	    }).strict]).optional,
 	    scopeTypes: check.func,
+	    scopeTypesFunction: check.oneOf(['warn', 'throw']).optional,
 	    data: check.object.optional
 	  }).strict;
 
