@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {expectPass, expectFail, controllers} from '../test-utils';
+import {expectPass, expectFail, controllers} from '../test.utils';
 import injectableFunction from './injectableFunction';
 
 describe(`injectableFunction checker`, () => {

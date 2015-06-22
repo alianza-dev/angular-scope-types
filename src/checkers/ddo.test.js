@@ -1,4 +1,4 @@
-import {expectPass, expectFail, link, controllers} from '../test-utils';
+import {expectPass, expectFail, link, controllers} from '../test.utils';
 import scopeTypesFactory from '../scopeTypes';
 
 import ddoFactory from './ddo';
