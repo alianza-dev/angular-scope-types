@@ -1,0 +1,1 @@
+../dist/angular-scope-types.js
