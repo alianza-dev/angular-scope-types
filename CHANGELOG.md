@@ -1,3 +1,14 @@
+# 1.0.0-beta.5
+
+## Breaking Changes
+
+- Now, if a checker is not optional, the api-check for it will be evaluated immediately.
+
+## New Features
+
+- Adding `displayName` for the wrapper controller for error messaging and debugging.
+- Adding `scopeTypesFunction` to the `ddo` to allow you to specify `warn` or `throw`.
+
 # 1.0.0-beta.4
 
 ## New Features

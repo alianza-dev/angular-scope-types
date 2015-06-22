@@ -37,6 +37,7 @@ export default function ddo({
       }).strict
     ]).optional,
     scopeTypes: check.func,
+    scopeTypesFunction: check.oneOf(['warn', 'throw']).optional,
     data: check.object.optional
   }).strict;
 

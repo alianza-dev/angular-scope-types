@@ -12,7 +12,7 @@
     "build:prod": "NODE_ENV=production webpack --config node_modules/kcd-common-tools/shared/webpack.config.js --progress --colors",
     "build": "npm run build:dist & npm run build:prod",
     "ci": "npm run code-checks && npm run test:single && npm run check-coverage && npm run build",
-    "check-coverage": "./node_modules/istanbul/lib/cli.js check-coverage --statements 97 --functions 84 --lines 95 --branches 89",
+    "check-coverage": "./node_modules/istanbul/lib/cli.js check-coverage --statements 97 --branches 89 --functions 100 --lines 95",
     "report-coverage": "cat ./coverage/lcov.info | codecov",
     "deploy": "npm run deployClean && npm run deployCopy && npm run deploySurge",
     "deploySurge": "surge -p deploy.ignored -d angular-scope-types.surge.sh",

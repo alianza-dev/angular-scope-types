@@ -56,7 +56,7 @@ function scopeTypesFactory({
       $scope.$scopeTypesResults = {__passed: 0, __failed: 0};
 
       angular.forEach(typeDefinitions, (check, name) => {
-        if (!angular.isDefined(context[name])) {
+        if (!angular.isDefined(context[name]) && check.isOptional) {
           let prefix = ddo.controllerAs ? ddo.controllerAs + '.' : '';
           const stopWatching = $scope.$watch(`${prefix}${name}`, (value, oldValue) => {
             if (value !== oldValue) {
@@ -71,7 +71,7 @@ function scopeTypesFactory({
 
 
       function checkOption(checker, name) {
-        $scope.$scopeTypesResults[name] = apiCheckInstance.warn(
+        $scope.$scopeTypesResults[name] = apiCheckInstance[ddo.scopeTypesFunction || 'warn'](
           checker, context[name], {prefix: `${ddo.name}Directive for "${name}"`}
         );
         updateData();
@@ -110,7 +110,17 @@ function scopeTypesFactory({
       }
 
       wrappedController.$inject = ['$scope', '$controller', '$element', '$attrs', '$transclude', '$injector'];
+      wrappedController.displayName = getWrappedControllerDisplayName(originalController);
       return wrappedController;
+    }
+
+    function getWrappedControllerDisplayName(originalController) {
+      const originalControllerName = originalController.displayName || originalController.name;
+      let name = 'angular-scope-types controller wrapper';
+      if (originalControllerName) {
+        name = `${name} for ${originalControllerName}`;
+      }
+      return name;
     }
   }
 }

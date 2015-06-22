@@ -26,11 +26,12 @@ describe(`scopeTypes`, () => {
     describe(`creating directives`, () => {
       let scope, el;
 
-      const basicTemplate = '<scope-type-dir foo="foo" bar="barString"></scope-type-dir>';
+      const basicTemplate = '<scope-type-dir foo="foo" bar="barString" baz="baz"></scope-type-dir>';
 
       it(`should allow me to create a type checked directive`, () => {
         createDirective();
         compileAndDigest({
+          baz: 'hi',
           foo: {isFoo: true, isBar: false, someNum: 23}
         });
         expectNoWarning();
@@ -39,10 +40,20 @@ describe(`scopeTypes`, () => {
       it(`should warn me when I pass something wrong to the directive`, () => {
         createDirective();
         compileAndDigest({
+          baz: 'hi',
           foo: {isFoo: 'not a boolean', isBar: false, someNum: 23}
         });
         expectWarning(/not a boolean/);
       });
+
+      it(`should warn if something that is not optional is not passed`, () => {
+        createDirective();
+        compileAndDigest({
+          // missing baz
+        });
+        expectWarning(/Required/);
+      });
+
 
       it(`should be able to be disabled`, () => {
         const myDisabledScopeTypes = scopeTypesFactory({disabled: true});
@@ -51,7 +62,9 @@ describe(`scopeTypes`, () => {
         const scopeTypesSpy = sinon.spy(getScopeTypes);
         createDirective(myDirName, {controller}, myDisabledScopeTypes);
 
-        compileAndDigest({}, '<dir-name></dir-name>');
+        compileAndDigest({
+          baz: 'hi'
+        }, '<dir-name></dir-name>');
 
         angular.mock.inject(['$injector', $injector => {
           const ddo = $injector.get(`${myDirName}Directive`);
@@ -75,7 +88,7 @@ describe(`scopeTypes`, () => {
 
           expect(vm.bar).to.eq('barString');
         }
-        compileAndDigest();
+        compileAndDigest({baz: 'hey'});
         expectNoWarning();
       });
 
@@ -92,13 +105,19 @@ describe(`scopeTypes`, () => {
         }]);
       });
 
+      it(`should allow you to pass your own scopeTypesFunction function`, () => {
+        createDirective(undefined, {scopeTypesFunction: 'throw'});
+        expect(() => compileAndDigest({})).to.throw();
+        expectNoWarning();
+      });
+
       function createDirective(name, definition, scopeTypesInstance = scopeTypes) {
         angular.mock.module(['$provide', '$compileProvider', function($provide, $compileProvider) {
           $provide.constant('myScopeTypes', scopeTypesInstance);
           $compileProvider.directive(name || 'scopeTypeDir', ['myScopeTypes', function(myScopeTypes) {
             return myScopeTypes.directive(angular.extend({
               template: 'foo',
-              scope: {foo: '=', bar: '@'},
+              scope: {foo: '=', bar: '@', baz: '='},
               scopeTypes: getScopeTypes,
               controllerAs: 'vm',
               bindToController: true,
@@ -126,8 +145,9 @@ describe(`scopeTypes`, () => {
             isBar: st.bool,
             someNum: st.number,
             someOptional: st.object.optional
-          }).strict,
-          bar: st.oneOf(['fooString', 'barString']).optional
+          }).strict.optional,
+          bar: st.oneOf(['fooString', 'barString']).optional,
+          baz: st.string
         };
       }
     });
@@ -142,13 +162,18 @@ describe(`scopeTypes`, () => {
   }
 
   function expectWarning(warning) {
-    expect(warnings).to.have.length(1);
+    if (!warnings.length) {
+      throw new Error('Expected a warning, but non was logged');
+    }
     expect(warnings[0]).to.have.length(1);
     expect(warnings[0][0]).to.match(warning);
   }
 
   function expectNoWarning() {
-    expect(warnings).to.have.length(0);
+    if (warnings.length) {
+      console.log(warnings);
+      throw new Error('Expected no warning to be logged, but one was');
+    }
   }
 
 });
