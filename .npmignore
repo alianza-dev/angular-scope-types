@@ -1,14 +1,1 @@
-.idea
-coverage
-node_modules
-.test
-.editorconfig
-.gitignore
-.eslintignore
-.eslintrc
-.travis.yml
-index.html
-npm-debug.log
-webpack.config.js
-scripts
-karma.conf.js
+node_modules/kcd-common-tools/shared/link/npmignore

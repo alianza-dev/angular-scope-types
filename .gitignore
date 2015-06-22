@@ -1,5 +1,1 @@
-*.log
-node_modules
-
-.test
-coverage
+node_modules/kcd-common-tools/shared/link/gitignore

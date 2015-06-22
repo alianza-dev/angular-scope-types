@@ -2,7 +2,6 @@
 /* eslint max-nested-callbacks:0 */
 import {expect} from 'chai';
 import angular from 'angular-fix';
-import sinon from 'sinon';
 import apiCheck from 'api-check';
 
 import scopeTypesFactory from './scopeTypes';
