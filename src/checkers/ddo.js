@@ -20,6 +20,7 @@ export default function ddo({
     templateUrl: check.shape.ifNot('template', check.string).optional,
     transclude: check.bool.optional,
     restrict: check.oneOf(['A', 'E', 'C', 'AE', 'EA', 'AEC', 'AC', 'EC']).optional,
+    replace: check.bool.optional,
     templateNamespace: check.oneOf(['html', 'svg', 'math']).optional,
     scope: check.oneOfType([check.bool, check.objectOf(check.string)]).optional, // TODO, make an advanced scope checker
     controller: check.injectableFunction.optional,

@@ -1,3 +1,9 @@
+# 1.0.0-beta.7
+
+## Bug Fixes
+
+- Allowing `replace` in the `ddo` checker.
+
 # 1.0.0-beta.6
 
 ## Other

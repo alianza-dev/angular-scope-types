@@ -29,6 +29,7 @@ describe(`ddo checker`, () => {
         controllerAs: 'vm',
         controller: controllers.$inject,
         bindToController: true,
+        replace: true,
         /* istanbul ignore next */
         scopeTypes: st => ({foo: st.shape({})})
       }));
